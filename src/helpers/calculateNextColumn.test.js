@@ -1,12 +1,11 @@
 const calculateNextColumn = require("./calculateNextColumn");
 
-describe("Calculating the next column", () => {
+describe("Calculating the next column (easy tests)", () => {
   const FIRST_COLUMN = [
     { sum: 1, dirFlag: "" },
     { sum: 2, dirFlag: "" },
     { sum: 3, dirFlag: "" },
   ];
-
   const SECOND_COLUMN = [5, 6, 7];
 
   const result = calculateNextColumn(FIRST_COLUMN, SECOND_COLUMN);
@@ -26,23 +25,50 @@ describe("Calculating the next column", () => {
     expect(result[1].dirFlags).toBe("u"); // The move from 3 to 6 is upwards
     expect(result[2].dirFlags).toBe("r"); // The move from 3 to 7 is rightwards
   });
+});
 
+describe("Calculating the next column when the first column has identical sums", () => {
   const TRICKY_FIRST_COLUMN = [
     { sum: 2, dirFlag: "" },
     { sum: 2, dirFlag: "" },
     { sum: 2, dirFlag: "" },
   ];
-  const multiFlagResult = calculateNextColumn(TRICKY_FIRST_COLUMN, SECOND_COLUMN);
+  const SECOND_COLUMN = [5, 6, 7];
+
+  const result = calculateNextColumn(TRICKY_FIRST_COLUMN, SECOND_COLUMN);
 
   it("handles when multiple direction flags should be set", async () => {
-    expect(multiFlagResult[0].dirFlags).toBe("ru"); // The move from 2 to 5 can be righwards and upwards
-    expect(multiFlagResult[1].dirFlags).toBe("dru"); // The move from 2 to 6 can be in all directions
-    expect(multiFlagResult[2].dirFlags).toBe("dr");
+    expect(result[0].dirFlags).toBe("ru"); // The move from 2 to 5 can be righwards and upwards
+    expect(result[1].dirFlags).toBe("dru"); // The move from 2 to 6 can be from all directions
+    expect(result[2].dirFlags).toBe("dr");
   });
 
-  it("calculates the sum correctly when multiple sums are the same in the first column", async () => {
-    expect(multiFlagResult[0].sum).toBe(7);
-    expect(multiFlagResult[1].sum).toBe(8);
-    expect(multiFlagResult[2].sum).toBe(9);
+  it("calculates the sum correctly", async () => {
+    expect(result[0].sum).toBe(7);
+    expect(result[1].sum).toBe(8);
+    expect(result[2].sum).toBe(9);
+  });
+});
+
+describe("Calculating the next column when the first column has identical sums", () => {
+  const TRICKY_FIRST_COLUMN = [
+    { sum: 2, dirFlag: "" },
+    { sum: 2, dirFlag: "" },
+    { sum: 2, dirFlag: "" },
+  ];
+  const SECOND_COLUMN = [5, 6, 7];
+
+  const result = calculateNextColumn(TRICKY_FIRST_COLUMN, SECOND_COLUMN);
+
+  it("handles when multiple direction flags should be set", async () => {
+    expect(result[0].dirFlags).toBe("ru"); // The move from 2 to 5 can be righwards and upwards
+    expect(result[1].dirFlags).toBe("dru"); // The move from 2 to 6 can be from all directions
+    expect(result[2].dirFlags).toBe("dr");
+  });
+
+  it("calculates the sum correctly", async () => {
+    expect(result[0].sum).toBe(7);
+    expect(result[1].sum).toBe(8);
+    expect(result[2].sum).toBe(9);
   });
 });
