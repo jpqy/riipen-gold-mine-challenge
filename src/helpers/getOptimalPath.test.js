@@ -32,5 +32,7 @@ describe("Getting the optimal path given a calculated mine", () => {
     const { startingRow, directions } = bestPath;
     expect(typeof startingRow).toBe("number");
     expect(directions).not.toMatch(/[^dru]/);
+    expect(directions).toBe("uru"); // See end of NOTES.md
+    expect(startingRow).toBe(2); // See end of NOTES.md
   });
 });
