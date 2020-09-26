@@ -90,7 +90,7 @@ This idea came when staring at a 2D array of numbers like the one below:
 | 1   | 2   | 2   | 4   |
 | 6   | 9   | 8   | 7   |
 | 6   | 1   | 0   | 1   |
-| 1   | 5   | 4   | 7   |
+| 9   | 5   | 4   | 7   |
 
 What if we did a sweep of the mine from left to right and kept adding the numbers? We would add the numbers from the first and second columns and store it in the second column. Since the second column can legally make a sum with up to 3 numbers in the first column, it would obviously choose the highest number. For example, 2 would choose to sum with 6 instead of 1. We can thus calculate the second column like so:
 
