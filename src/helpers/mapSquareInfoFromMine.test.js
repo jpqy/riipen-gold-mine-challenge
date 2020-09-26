@@ -7,10 +7,15 @@ describe("Mapping the SquareInfo from a mine", () => {
     [6, 1, 0, 1],
     [1, 5, 4, 7],
   ];
+  const result = mapSquareInfoFromMine(SMALL_MINE);
 
   it("returns a 2D array", () => {
-    const result = mapSquareInfoFromMine(SMALL_MINE);
     expect(Array.isArray(result)).toBe(true);
     expect(Array.isArray(result[0])).toBe(true);
+  });
+
+  it("returns a 2D array where the first column is SquareInfo objects", () => {
+    expect(result[0][0]).toMatchObject({ sum: 1, dirFlags: "" });
+    expect(result[2][0]).toMatchObject({ sum: 6, dirFlags: "" });
   });
 });

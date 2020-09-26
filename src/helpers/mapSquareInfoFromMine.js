@@ -12,7 +12,15 @@
  * @return {SquareInfo[][]}      A 2D array of SquareInfo
  */
 function mapSquareInfoFromMine(mine) {
-  return [[]];
+  // Initialize rows of the mapped array, with each row being an array
+  const mappedMine = [...Array(mine.length)].map((x) => []);
+
+  // Turn the first column of the mine into SquareInfo objects
+  for (let i = 0; i < mine.length; i++) {
+    mappedMine[i][0] = { sum: mine[i][0], dirFlags: "" };
+  }
+
+  return mappedMine;
 }
 
 module.exports = mapSquareInfoFromMine;
