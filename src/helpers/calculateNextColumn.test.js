@@ -10,17 +10,17 @@ describe("Calculating the next column (easy tests)", () => {
 
   const result = calculateNextColumn(FIRST_COLUMN, SECOND_COLUMN);
 
-  it("returns an array", async () => {
+  it("returns an array", () => {
     expect(Array.isArray(result)).toBe(true);
   });
 
-  it("calculates the sum of the next column correctly", async () => {
+  it("calculates the sum of the next column correctly", () => {
     expect(result[0].sum).toBe(7); // The 5 in the second column should add the 2 from the first column
     expect(result[1].sum).toBe(9); // The 6 in the second column should add the 3 from the first column
     expect(result[2].sum).toBe(10); // The 7 in the second column should add the 3 from the first column
   });
 
-  it("calculates the direction flag of the next column correctly", async () => {
+  it("calculates the direction flag of the next column correctly", () => {
     expect(result[0].dirFlags).toBe("u"); // The move from 2 to 5 is an upwards move
     expect(result[1].dirFlags).toBe("u"); // The move from 3 to 6 is upwards
     expect(result[2].dirFlags).toBe("r"); // The move from 3 to 7 is rightwards
@@ -37,13 +37,13 @@ describe("Calculating the next column when the first column has identical sums",
 
   const result = calculateNextColumn(TRICKY_FIRST_COLUMN, SECOND_COLUMN);
 
-  it("handles when multiple direction flags should be set", async () => {
+  it("handles when multiple direction flags should be set", () => {
     expect(result[0].dirFlags).toBe("ru"); // The move from 2 to 5 can be righwards and upwards
     expect(result[1].dirFlags).toBe("dru"); // The move from 2 to 6 can be from all directions
     expect(result[2].dirFlags).toBe("dr");
   });
 
-  it("calculates the sum correctly", async () => {
+  it("calculates the sum correctly", () => {
     expect(result[0].sum).toBe(7);
     expect(result[1].sum).toBe(8);
     expect(result[2].sum).toBe(9);
@@ -60,13 +60,13 @@ describe("Calculating the next column when the first column has identical sums",
 
   const result = calculateNextColumn(TRICKY_FIRST_COLUMN, SECOND_COLUMN);
 
-  it("handles when multiple direction flags should be set", async () => {
+  it("handles when multiple direction flags should be set", () => {
     expect(result[0].dirFlags).toBe("ru"); // The move from 2 to 5 can be righwards and upwards
     expect(result[1].dirFlags).toBe("dru"); // The move from 2 to 6 can be from all directions
     expect(result[2].dirFlags).toBe("dr");
   });
 
-  it("calculates the sum correctly", async () => {
+  it("calculates the sum correctly", () => {
     expect(result[0].sum).toBe(7);
     expect(result[1].sum).toBe(8);
     expect(result[2].sum).toBe(9);
@@ -74,7 +74,7 @@ describe("Calculating the next column when the first column has identical sums",
 });
 
 describe("Calculating the next column while respecting movement restrictions", () => {
-  it("calculates the sum correctly", async () => {
+  it("calculates the sum correctly", () => {
     const FIRST_COLUMN_WITH_MOVEMENT_RESTRICTION = [
       { sum: 1, dirFlags: "u" },
       { sum: 2, dirFlags: "u" },
@@ -89,7 +89,7 @@ describe("Calculating the next column while respecting movement restrictions", (
     expect(result[2].sum).toBe(9); // 7 cannot sum with 3 so must sum with 2
   });
 
-  it("handles when no possible moves are available", async () => {
+  it("handles when no possible moves are available", () => {
     const FIRST_COLUMN_WITH_MOVEMENT_RESTRICTION = [
       { sum: 1, dirFlags: "r" },
       { sum: 2, dirFlags: "u" },
@@ -107,7 +107,7 @@ describe("Calculating the next column while respecting movement restrictions", (
 
 // The game actually ends when reaching a square with 0, so this must be represented somehow
 describe("Dealing with disabled squares", () => {
-  it("calculates disabled flag correctly when there are squares with 0", async () => {
+  it("calculates disabled flag correctly when there are squares with 0", () => {
     const FIRST_COLUMN_WITH_MOVEMENT_RESTRICTION = [
       { sum: 1, dirFlags: "" },
       { sum: 2, dirFlags: "" },
@@ -123,7 +123,7 @@ describe("Dealing with disabled squares", () => {
     expect(result[2].sum).toBe(10);
   });
 
-  it("reads the disabled flag correctly in the first column", async () => {
+  it("reads the disabled flag correctly in the first column", () => {
     const FIRST_COLUMN_WITH_DISABLED_FLAGS = [
       { sum: 1, dirFlags: "" },
       { sum: 2, dirFlags: "x" },
