@@ -74,18 +74,33 @@ describe("Calculating the next column when the first column has identical sums",
 });
 
 describe("Calculating the next column while respecting movement restrictions", () => {
-  const FIRST_COLUMN_WITH_MOVEMENT_RESTRICTION = [
-    { sum: 1, dirFlags: "u" },
-    { sum: 2, dirFlags: "u" },
-    { sum: 3, dirFlags: "r" },
-  ];
-  const SECOND_COLUMN = [5, 6, 7];
-
-  const result = calculateNextColumn(FIRST_COLUMN_WITH_MOVEMENT_RESTRICTION, SECOND_COLUMN);
-
   it("calculates the sum correctly", async () => {
+    const FIRST_COLUMN_WITH_MOVEMENT_RESTRICTION = [
+      { sum: 1, dirFlags: "u" },
+      { sum: 2, dirFlags: "u" },
+      { sum: 3, dirFlags: "r" },
+    ];
+    const SECOND_COLUMN = [5, 6, 7];
+
+    const result = calculateNextColumn(FIRST_COLUMN_WITH_MOVEMENT_RESTRICTION, SECOND_COLUMN);
+
     expect(result[0].sum).toBe(6); // 5 cannot sum with 2 so must sum with 1
     expect(result[1].sum).toBe(9); // 6 sums with 3
     expect(result[2].sum).toBe(9); // 7 cannot sum with 3 so must sum with 2
+  });
+
+  it("handles when no possible moves are available", async () => {
+    const FIRST_COLUMN_WITH_MOVEMENT_RESTRICTION = [
+      { sum: 1, dirFlags: "r" },
+      { sum: 2, dirFlags: "u" },
+      { sum: 3, dirFlags: "r" },
+    ];
+    const SECOND_COLUMN = [5, 6, 7];
+
+    const result = calculateNextColumn(FIRST_COLUMN_WITH_MOVEMENT_RESTRICTION, SECOND_COLUMN);
+
+    // 5 cannot sum with either 1 or 2 due to restrictions. By default, Math.max(...[]) actually gives -Infinity which
+    // may not be a bad idea.
+    expect(result[0].sum).toBe(-Infinity);
   });
 });
