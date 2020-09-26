@@ -6,6 +6,9 @@
  *                             x = this square should be considered disabled
  */
 
+const { getColumn, addColumn } = require("./arrayUtils");
+const calculateNextColumn = require("./calculateNextColumn");
+
 /**
  *
  * @param  {number[][]}     mine A 2D array of positive integers representing the mine and its gold values
@@ -20,6 +23,13 @@ function mapSquareInfoFromMine(mine) {
     mappedMine[i][0] = { sum: mine[i][0], dirFlags: "" };
   }
 
+  // Get the first column of SquareInfo and the second column of the mine and run it through calculateNextColumn
+  const prevColumnSquareInfo = getColumn(mappedMine, 0);
+  const nextColumnGold = getColumn(mine, 1);
+  const nextColumnSquareInfo = calculateNextColumn(prevColumnSquareInfo, nextColumnGold);
+
+  // Add the column to mappedMine
+  addColumn(mappedMine, nextColumnSquareInfo, 1);
   return mappedMine;
 }
 
