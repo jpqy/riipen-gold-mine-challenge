@@ -8,6 +8,10 @@
   - [Greedy algorithm](#greedy-algorithm)
     - [Algorithm time complexity](#algorithm-time-complexity)
     - [Problems with this simple greedy algorithm](#problems-with-this-simple-greedy-algorithm)
+  - [Greedy-algorithm with _x_ moves lookahead](#greedy-algorithm-with-_x_-moves-lookahead)
+    - [Problems with _x_ move lookahead](#problems-with-_x_-move-lookahead)
+  - [Brute-force approach](#brute-force-approach)
+    - [Problems with the brute-force approach](#problems-with-the-brute-force-approach)
 
 <!-- /code_chunk_output -->
 
@@ -42,3 +46,22 @@ Adding a new column would mean the algorithm has to make only one more decision.
   Here, the algorithm would choose to start at the 9 position and be stuck with 0 gold for its next move due its shortsightedness.
 
 Therefore, any good solution to the gold-mine problem must look further than one move ahead.
+
+### Greedy-algorithm with _x_ moves lookahead
+
+A smarter greedy-algorithm would employ some kind of lookahead before deciding one which course to take. In the above example, instead of looking only at the highest value of the first column only (9), a 1-move lookahead algorithm would try to find the highest sum that can be made with the first 2 columns. It would find that 7+9 gives the highest sum of all, and avoid starting at the 9 as the simple greedy algorithm would have done.
+
+#### Problems with _x_ move lookahead
+
+- In the _x_ move lookahead, any value of _x_ lower than the total columns of the mine is an approximate approach, as there can always be a tricky mine constructed in a way that gives you a different, suboptimal solution when your lookahead is _x_ instead of _x+1_.
+
+### Brute-force approach
+
+What if you set your _x_ to be the total columns of the mine? Then the algorithm will consider every possible move and is guaranteed to make the correct choice each time.
+
+#### Problems with the brute-force approach
+
+- The algorithm's time performance is unacceptable when the number of columns is large. In particular, we know that the algorithm in general needs to make a binary decision at each column (although it can make 3 possible moves, one is always restricted), so the time complexity becomes _O_(2^n), where n is the number of columns.
+
+  - There is no pragmatic considerations about which branches are promising and should be explored, and which branches can be considered "dead" and left alone.
+  - Since there is no attempt to globally store information about the mine, there are a lot of duplicate and unnecessary calculations.
