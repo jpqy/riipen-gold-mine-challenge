@@ -8,6 +8,8 @@
  *                             x = this square should be considered disabled
  */
 
+const { getColumn } = require("./arrayUtils");
+
 /**
  * @typedef  BestPath
  * @type     {object}
@@ -21,7 +23,38 @@
  * @return {BestPath} The path of the route that leads to the most gold according to squareInfoArray
  */
 function getOptimalPath(squareInfoArray) {
-  return { startingRow: 1, directions: "dudr" };
+  // Get the row number of the last column with the highest sum
+  const indexOfLastColumn = squareInfoArray[0].length - 1;
+  const lastColumn = getColumn(squareInfoArray, indexOfLastColumn);
+  const lastColumnSums = lastColumn.map((squareInfo) => squareInfo.sum);
+  const maxFinalSum = Math.max(...lastColumnSums);
+  const endingRow = lastColumnSums.indexOf(maxFinalSum);
+
+  // Store directions as 1-character array
+  const directions = [];
+
+  // Starting at the end square, store the direction from the dirFlag and use it to move to the previous square
+  let currentRow = endingRow;
+  for (let i = indexOfLastColumn; i > 0; i--) {
+    const previousDirFlags = squareInfoArray[currentRow][i].dirFlags;
+
+    // If more than one flag, pick the one that isn't a repeat of the next direction
+    let previousDirection;
+    if (previousDirFlags.length > 1) {
+      previousDirection = previousDirFlags.split("").find((direction) => direction !== directions[0]);
+    } else {
+      previousDirection = previousDirFlags;
+    }
+    directions.unshift(previousDirection);
+
+    // Move up or down depending on the previous direction
+    if (previousDirection === "d") {
+      currentRow--; // The previous movement was downwards, so we must go upwards to reach the previous square
+    } else if (previousDirection === "u") {
+      currentRow++;
+    }
+  }
+  return { startingRow: currentRow, directions: directions.join("") };
 }
 
 module.exports = getOptimalPath;
