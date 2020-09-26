@@ -13,7 +13,17 @@
  * @return                       An array with new SquareInfo calculated for the nextCol.
  */
 function calculateNextColumn(prevCol, nextCol) {
-  return [];
+  const nextColResults = nextCol.map((nextColValue, i) => {
+    // Find the maximum sum from the prevCol squares adjacent to nextCol
+    const legalPrevColSums = [prevCol[i - 1], prevCol[i], prevCol[i + 1]]
+      .filter((squareInfo) => !!squareInfo) // Filter out inexistent squareInfos that are outside of range (i.e [-1])
+      .map((squareInfo) => squareInfo.sum);
+    const maxSumFromPrevCol = Math.max(...legalPrevColSums);
+
+    return { sum: nextColValue + maxSumFromPrevCol };
+  });
+
+  return nextColResults;
 }
 
 module.exports = calculateNextColumn;
