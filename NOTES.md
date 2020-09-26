@@ -14,6 +14,11 @@
     - [Problems with the brute-force approach](#problems-with-the-brute-force-approach)
 - [Towards a better algorithm](#towards-a-better-algorithm)
   - [Initial ideal for a better algorithm](#initial-ideal-for-a-better-algorithm)
+  - [1. Calculating the sum of the next column](#1-calculating-the-sum-of-the-next-column)
+  - [2. Storing direction info and iterating](#2-storing-direction-info-and-iterating)
+  - [3. Final iteration and working backwards](#3-final-iteration-and-working-backwards)
+  - [Coding the algorithm](#coding-the-algorithm)
+    - [Coding plan](#coding-plan)
 
 <!-- /code_chunk_output -->
 
@@ -89,6 +94,8 @@ This idea came when staring at a 2D array of numbers like the one below:
 
 What if we did a sweep of the mine from left to right and kept adding the numbers? We would add the numbers from the first and second columns and store it in the second column. Since the second column can legally make a sum with up to 3 numbers in the first column, it would obviously choose the highest number. For example, 2 would choose to sum with 6 instead of 1. We can thus calculate the second column like so:
 
+### 1. Calculating the sum of the next column
+
 |     |       |     |     |
 | --- | ----- | --- | --- |
 | 1   | 2 + 6 | 2   | 4   |
@@ -102,6 +109,8 @@ What if we did a sweep of the mine from left to right and kept adding the number
 | 6   | **15** | 8   | 7   |
 | 6   | **10** | 0   | 1   |
 | 9   | **14** | 4   | 7   |
+
+### 2. Storing direction info and iterating
 
 For the third column, we need to make sure each square is legally able to sum with the second column. In the above example, the **10** was achieved by an upward move and thus the 8 in the third column cannot combine with it as that would be two upward moves in a row. We can take care of this by also including a direction flag of the move that it took to get to each square, like so, where **u, r, d** means an upward, right, or downward move was made to reach the square.
 
@@ -132,6 +141,8 @@ _Note: 4 cannot combine with **14r** due to its flag_
 
 _Note: landing on a 0 square actually stops the mining so we need to set the sum to 0 to reflect that it should be avoided_
 
+### 3. Final iteration and working backwards
+
 And finally, we do the last calculation:
 
 |     |          |         |             |
@@ -155,3 +166,21 @@ We now can see that the **27u** ended up with the highest gold. As a bonus, we c
 Working backwards again, we now know the optimal path starts at the 6 in the third row, then goes up, right, then up.
 
 _Note: when deciding between 15u and 15r, we know 15r is impossible because it is preceded by 23r and there can be no back-to-back repeated directions. Thus, we reject 15r as a possibility._
+
+### Coding the algorithm
+
+The challenge requires modification of a `move` function that accepts an array representing the mine, a tuple representing the current position, and must return a tuple representing the next move.
+
+Since the proposed algorithm calculate the optimal path once, it needs to be run once when a new mine is given, and store the optimal path outside of the `move` function. The `move` function would then need to access the data about the optimal path produced by the algorithm.
+
+Depending on how `index.js` is set up, logic may need to be added to detect when the mine is changed to ensure the algorithm is re-run for a new mine.
+
+#### Coding plan
+
+1. Write a function that takes an array representing the first column, an array representing the second column, and returns an array representing the "summed" second column with a direction flag
+
+2. Write a function that takes a 2D array representing the mine and uses the above function to produce a 2D array similar to [the final table](#3-final-iteration-and-working-backwards)
+
+3. Write a function that takes an array produced by the function above and works backwards to return the best path, maybe just in string form (i.e. "RDURDURDR")
+
+4. Make the `move` function read from the directions and return appropriate positions
