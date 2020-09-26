@@ -2,9 +2,9 @@ const calculateNextColumn = require("./calculateNextColumn");
 
 describe("Calculating the next column (easy tests)", () => {
   const FIRST_COLUMN = [
-    { sum: 1, dirFlag: "" },
-    { sum: 2, dirFlag: "" },
-    { sum: 3, dirFlag: "" },
+    { sum: 1, dirFlags: "" },
+    { sum: 2, dirFlags: "" },
+    { sum: 3, dirFlags: "" },
   ];
   const SECOND_COLUMN = [5, 6, 7];
 
@@ -29,9 +29,9 @@ describe("Calculating the next column (easy tests)", () => {
 
 describe("Calculating the next column when the first column has identical sums", () => {
   const TRICKY_FIRST_COLUMN = [
-    { sum: 2, dirFlag: "" },
-    { sum: 2, dirFlag: "" },
-    { sum: 2, dirFlag: "" },
+    { sum: 2, dirFlags: "" },
+    { sum: 2, dirFlags: "" },
+    { sum: 2, dirFlags: "" },
   ];
   const SECOND_COLUMN = [5, 6, 7];
 
@@ -52,9 +52,9 @@ describe("Calculating the next column when the first column has identical sums",
 
 describe("Calculating the next column when the first column has identical sums", () => {
   const TRICKY_FIRST_COLUMN = [
-    { sum: 2, dirFlag: "" },
-    { sum: 2, dirFlag: "" },
-    { sum: 2, dirFlag: "" },
+    { sum: 2, dirFlags: "" },
+    { sum: 2, dirFlags: "" },
+    { sum: 2, dirFlags: "" },
   ];
   const SECOND_COLUMN = [5, 6, 7];
 
@@ -70,5 +70,22 @@ describe("Calculating the next column when the first column has identical sums",
     expect(result[0].sum).toBe(7);
     expect(result[1].sum).toBe(8);
     expect(result[2].sum).toBe(9);
+  });
+});
+
+describe("Calculating the next column while respecting movement restrictions", () => {
+  const FIRST_COLUMN_WITH_MOVEMENT_RESTRICTION = [
+    { sum: 1, dirFlags: "u" },
+    { sum: 2, dirFlags: "u" },
+    { sum: 3, dirFlags: "r" },
+  ];
+  const SECOND_COLUMN = [5, 6, 7];
+
+  const result = calculateNextColumn(FIRST_COLUMN_WITH_MOVEMENT_RESTRICTION, SECOND_COLUMN);
+
+  it("calculates the sum correctly", async () => {
+    expect(result[0].sum).toBe(6); // 5 cannot sum with 2 so must sum with 1
+    expect(result[1].sum).toBe(9); // 6 sums with 3
+    expect(result[2].sum).toBe(9); // 7 cannot sum with 3 so must sum with 2
   });
 });

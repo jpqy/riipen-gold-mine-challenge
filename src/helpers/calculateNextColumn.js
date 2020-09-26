@@ -16,7 +16,17 @@ function calculateNextColumn(prevCol, nextCol) {
   const nextColResults = nextCol.map((nextColValue, i) => {
     // Find the max sum from the prevCol squares adjacent to nextCol
     const legalPrevColSums = [prevCol[i - 1], prevCol[i], prevCol[i + 1]]
-      .filter((squareInfo) => !!squareInfo) // Filter out inexistent squareInfos that are outside of range (i.e [-1])
+      .filter((squareInfo, j) => {
+        if (!squareInfo) return false; // Filter out inexistent squareInfos that are outside of range (i.e [-1])
+
+        // Check if prevCol has a single dirFlag and filter it out if it would mean making the same move twice
+        if (j === 0 && squareInfo.dirFlags === "d") return false;
+        if (j === 1 && squareInfo.dirFlags === "r") return false;
+        if (j === 2 && squareInfo.dirFlags === "u") return false;
+
+        // Multiple or no flags (i.e. very first column of mine) means any subsequent direction is legal
+        return true;
+      })
       .map((squareInfo) => squareInfo.sum);
     const maxSumFromPrevCol = Math.max(...legalPrevColSums);
 
