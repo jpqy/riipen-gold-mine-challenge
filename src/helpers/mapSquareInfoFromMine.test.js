@@ -29,4 +29,35 @@ describe("Mapping the SquareInfo from a mine", () => {
       { sum: 14, dirFlags: "r" },
     ]);
   });
+
+  it("returns the entire calculated SquareInfo objects", () => {
+    const EXPECTED_RESULT = [
+      [
+        { sum: 1, dirFlags: "" },
+        { sum: 8, dirFlags: "u" },
+        { sum: 17, dirFlags: "u" },
+        { sum: 27, dirFlags: "u" },
+      ],
+      [
+        { sum: 6, dirFlags: "" },
+        { sum: 15, dirFlags: "ru" },
+        { sum: 23, dirFlags: "r" },
+        { sum: 24, dirFlags: "d" },
+      ],
+      [
+        { sum: 6, dirFlags: "" },
+        { sum: 10, dirFlags: "u" },
+        { sum: 0, dirFlags: "x" },
+        { sum: 24, dirFlags: "d" },
+      ],
+      [
+        { sum: 9, dirFlags: "" },
+        { sum: 14, dirFlags: "r" },
+        { sum: 14, dirFlags: "d" },
+        { sum: 21, dirFlags: "r" },
+      ],
+    ];
+
+    expect(result).toStrictEqual(EXPECTED_RESULT);
+  });
 });
