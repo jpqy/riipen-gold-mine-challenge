@@ -22,8 +22,8 @@ describe("Calculating the next column", () => {
   });
 
   it("calculates the direction flag of the next column correctly", async () => {
-    expect(result[0].dirFlag).toBe("u"); // The move from 2 to 5 is an upwards move
-    expect(result[1].dirFlag).toBe("u"); // The move from 3 to 6 is upwards
-    expect(result[2].dirFlag).toBe("r"); // The move from 3 to 7 is rightwards
+    expect(result[0].dirFlags).toBe("u"); // The move from 2 to 5 is an upwards move
+    expect(result[1].dirFlags).toBe("u"); // The move from 3 to 6 is upwards
+    expect(result[2].dirFlags).toBe("r"); // The move from 3 to 7 is rightwards
   });
 });
