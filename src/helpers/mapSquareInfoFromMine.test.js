@@ -30,7 +30,7 @@ describe("Mapping the SquareInfo from a mine", () => {
     ]);
   });
 
-  it("returns the entire calculated SquareInfo objects", () => {
+  it("returns the entire calculated SquareInfo objects that matches NOTES.md", () => {
     const EXPECTED_RESULT = [
       [
         { sum: 1, dirFlags: "" },

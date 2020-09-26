@@ -24,12 +24,15 @@ function mapSquareInfoFromMine(mine) {
   }
 
   // Get the first column of SquareInfo and the second column of the mine and run it through calculateNextColumn
-  const prevColumnSquareInfo = getColumn(mappedMine, 0);
-  const nextColumnGold = getColumn(mine, 1);
-  const nextColumnSquareInfo = calculateNextColumn(prevColumnSquareInfo, nextColumnGold);
+  for (let i = 1; i < mine[0].length; i++) {
+    const prevColumnSquareInfo = getColumn(mappedMine, i - 1);
+    const nextColumnGold = getColumn(mine, i);
+    const nextColumnSquareInfo = calculateNextColumn(prevColumnSquareInfo, nextColumnGold);
 
-  // Add the column to mappedMine
-  addColumn(mappedMine, nextColumnSquareInfo, 1);
+    // Add the column to mappedMine
+    addColumn(mappedMine, nextColumnSquareInfo, i);
+  }
+
   return mappedMine;
 }
 
