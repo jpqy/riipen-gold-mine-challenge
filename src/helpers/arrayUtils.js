@@ -13,4 +13,19 @@ function getColumn(array, colNumber) {
   return column;
 }
 
-module.exports = { getColumn };
+/**
+ * Inserts a 1D array representing a column into a 2D array at the specified column position.
+ * Note: mutates the array in place.
+ * @param  {any[][]}  array     The 2D array
+ * @param  {any[]}    column    A 1D array representing the column values to add
+ * @param  {number}   colNumber A position to add the column
+ * @return {any[][]}            An updated 2D array with the column values inserted
+ */
+function addColumn(array, column, colNumber) {
+  for (let i = 0; i < array.length; i++) {
+    array[i][colNumber] = column[i];
+  }
+  return array;
+}
+
+module.exports = { getColumn, addColumn };
