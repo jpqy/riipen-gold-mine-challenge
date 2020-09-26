@@ -12,6 +12,8 @@
     - [Problems with _x_ move lookahead](#problems-with-_x_-move-lookahead)
   - [Brute-force approach](#brute-force-approach)
     - [Problems with the brute-force approach](#problems-with-the-brute-force-approach)
+- [Towards a better algorithm](#towards-a-better-algorithm)
+  - [Initial ideal for a better algorithm](#initial-ideal-for-a-better-algorithm)
 
 <!-- /code_chunk_output -->
 
@@ -57,7 +59,7 @@ A smarter greedy-algorithm would employ some kind of lookahead before deciding o
 
 ### Brute-force approach
 
-What if you set your _x_ to be the total columns of the mine? Then the algorithm will consider every possible move and is guaranteed to make the correct choice each time.
+What if you set your _x_ to be the total columns of the mine? Then the algorithm will consider every possible move and is guaranteed to make the correct choice each time. A recursive algorithm could be designed that calculated the sum of every possible route through the mine, which allows us to get the path that led to the highest sum.
 
 #### Problems with the brute-force approach
 
@@ -65,3 +67,91 @@ What if you set your _x_ to be the total columns of the mine? Then the algorithm
 
   - There is no pragmatic considerations about which branches are promising and should be explored, and which branches can be considered "dead" and left alone.
   - Since there is no attempt to globally store information about the mine, there are a lot of duplicate and unnecessary calculations.
+
+## Towards a better algorithm
+
+A better algorithm can be developed that provides a reasonable runtime and good (maybe perfect) accuracy by addressing this point:
+
+> - Since there is no attempt to globally store information about the mine, there are a lot of duplicate and unnecessary calculations.
+
+Instead of recursively exploring each path, this algorithm would ideally look at the mine as a whole and calculate each square once.
+
+### Initial ideal for a better algorithm
+
+This idea came when staring at a 2D array of numbers like the one below:
+
+|     |     |     |     |
+| --- | --- | --- | --- |
+| 1   | 2   | 2   | 4   |
+| 6   | 9   | 8   | 7   |
+| 6   | 1   | 0   | 1   |
+| 1   | 5   | 4   | 7   |
+
+What if we did a sweep of the mine from left to right and kept adding the numbers? We would add the numbers from the first and second columns and store it in the second column. Since the second column can legally make a sum with up to 3 numbers in the first column, it would obviously choose the highest number. For example, 2 would choose to sum with 6 instead of 1. We can thus calculate the second column like so:
+
+|     |       |     |     |
+| --- | ----- | --- | --- |
+| 1   | 2 + 6 | 2   | 4   |
+| 6   | 9 + 6 | 8   | 7   |
+| 6   | 1 + 9 | 0   | 1   |
+| 9   | 5 + 9 | 4   | 7   |
+
+|     |        |     |     |
+| --- | ------ | --- | --- |
+| 1   | **8**  | 2   | 4   |
+| 6   | **15** | 8   | 7   |
+| 6   | **10** | 0   | 1   |
+| 9   | **14** | 4   | 7   |
+
+For the third column, we need to make sure each square is legally able to sum with the second column. In the above example, the **10** was achieved by an upward move and thus the 8 in the third column cannot combine with it as that would be two upward moves in a row. We can take care of this by also including a direction flag of the move that it took to get to each square, like so, where **u, r, d** means an upward, right, or downward move was made to reach the square.
+
+|     |          |     |     |
+| --- | -------- | --- | --- |
+| 1   | **8u**   | 2   | 4   |
+| 6   | **15ur** | 8   | 7   |
+| 6   | **10u**  | 0   | 1   |
+| 9   | **14r**  | 4   | 7   |
+
+Now, when the 8 in the third column is considering which square in the second column to sum with, it knows it cannot sum with **10u** because that would mean 2 upwards moves in a row. In this case, it sums with **15ur**. The **ur** multiflag indicates that **15ur** can be reached from two directions, so it actually has no restrictions on its next move. The next column is thus calculated like so:
+
+|     |          |              |     |
+| --- | -------- | ------------ | --- |
+| 1   | **8u**   | 2 + **15ur** | 4   |
+| 6   | **15ur** | 8 + **15ur** | 7   |
+| 6   | **10u**  | 0 + **15ur** | 1   |
+| 9   | **14r**  | 4 + **10u**  | 7   |
+
+_Note: 4 cannot combine with **14r** due to its flag_
+
+|     |          |         |     |
+| --- | -------- | ------- | --- |
+| 1   | **8u**   | **17u** | 4   |
+| 6   | **15ur** | **23r** | 7   |
+| 6   | **10u**  | 0       | 1   |
+| 9   | **14r**  | **14d** | 7   |
+
+_Note: landing on a 0 square actually stops the mining so we need to set the sum to 0 to reflect that it should be avoided_
+
+And finally, we do the last calculation:
+
+|     |          |         |             |
+| --- | -------- | ------- | ----------- |
+| 1   | **8u**   | **17u** | 4 + **23r** |
+| 6   | **15ur** | **23r** | 7 + **17u** |
+| 6   | **10u**  | 0       | 1 + **23r** |
+| 9   | **14r**  | **14d** | 7 + **14d** |
+
+|     |          |         |         |
+| --- | -------- | ------- | ------- |
+| 1   | **8u**   | **17u** | **27u** |
+| 6   | **15ur** | **23r** | **24d** |
+| 6   | **10u**  | 0       | **24d** |
+| 9   | **14r**  | **14d** | **21r** |
+
+We now can see that the **27u** ended up with the highest gold. As a bonus, we can use the direction flags to retrace the path that was taken. For example, we know **27u** was reached from an upwards move, so we know **23r** was the previous square. Going backwards, we get:
+
+`27u > 23r > 15u > 6 (the third row square)`
+
+Working backwards again, we now know the optimal path starts at the 6 in the third row, then goes up, right, then up.
+
+_Note: when deciding between 15u and 15r, we know 15r is impossible because it is preceded by 23r and there can be no back-to-back repeated directions. Thus, we reject 15r as a possibility._
