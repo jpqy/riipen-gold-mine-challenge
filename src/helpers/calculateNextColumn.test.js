@@ -99,8 +99,43 @@ describe("Calculating the next column while respecting movement restrictions", (
 
     const result = calculateNextColumn(FIRST_COLUMN_WITH_MOVEMENT_RESTRICTION, SECOND_COLUMN);
 
-    // 5 cannot sum with either 1 or 2 due to restrictions. By default, Math.max(...[]) actually gives -Infinity which
-    // may not be a bad idea.
-    expect(result[0].sum).toBe(-Infinity);
+    // The square should be set to disabled
+    expect(result[0].sum).toBe(0);
+    expect(result[0].dirFlags).toBe("x");
+  });
+});
+
+// The game actually ends when reaching a square with 0, so this must be represented somehow
+describe("Dealing with disabled squares", () => {
+  it("calculates disabled flag correctly when there are squares with 0", async () => {
+    const FIRST_COLUMN_WITH_MOVEMENT_RESTRICTION = [
+      { sum: 1, dirFlags: "" },
+      { sum: 2, dirFlags: "" },
+      { sum: 3, dirFlags: "" },
+    ];
+    const SECOND_COLUMN = [0, 6, 7];
+
+    const result = calculateNextColumn(FIRST_COLUMN_WITH_MOVEMENT_RESTRICTION, SECOND_COLUMN);
+
+    expect(result[0].sum).toBe(0);
+    expect(result[0].dirFlags).toBe("x");
+    expect(result[1].sum).toBe(9);
+    expect(result[2].sum).toBe(10);
+  });
+
+  it("reads the disabled flag correctly in the first column", async () => {
+    const FIRST_COLUMN_WITH_DISABLED_FLAGS = [
+      { sum: 1, dirFlags: "" },
+      { sum: 2, dirFlags: "x" },
+      { sum: 3, dirFlags: "x" },
+    ];
+    const SECOND_COLUMN = [5, 6, 7];
+
+    const result = calculateNextColumn(FIRST_COLUMN_WITH_DISABLED_FLAGS, SECOND_COLUMN);
+
+    expect(result[0].sum).toBe(6);
+    expect(result[1].sum).toBe(7);
+    expect(result[2].sum).toBe(0);
+    expect(result[2].dirFlags).toBe("x");
   });
 });
