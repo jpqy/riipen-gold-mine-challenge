@@ -1,7 +1,15 @@
+import getOptimalPath from "./helpers/getOptimalPath.js";
+import mapSquareInfoFromMine from "./helpers/mapSquareInfoFromMine.js";
 import Position from "./position.js";
 
-let movedRight;
+// A lookup table for movement directions in relation to row index
+const directionLookup = {
+  d: 1,
+  r: 0,
+  u: -1,
+};
 
+let optimalDirections;
 /**
  * Replace the logic in this function with your own custom movement algorithm.
  *
@@ -17,23 +25,21 @@ let movedRight;
  * @return {Position} The new position of the miner.
  */
 const move = (mine, position) => {
-  // TODO: write logic for miner. The current approach naive approach is to simply:
-  //   1. Start at (0,0)
-  //   2. Always moves right
+  // If position is undefined (i.e. starting a new mine), calculate the SquareInfo of the entire mine, figure out
+  // the optimal path, and store the directions in an outside variable
+  if (!position) {
+    const solvedMine = mapSquareInfoFromMine(mine);
+    const optimalPath = getOptimalPath(solvedMine);
+    const { startingRow, directions } = optimalPath;
+    optimalDirections = directions; // A string representing the optimal directions (i.e. 'dudrdu')
 
-  const newX = (position && position.x + 1) || 0;
-
-  let newY;
-
-  if (!movedRight) {
-    newY = (position && position.y) || 0;
-
-    movedRight = true;
-  } else {
-    newY = (position && position.y + 1) || 0;
-
-    movedRight = false;
+    return new Position(0, startingRow);
   }
+
+  // Use the optimalDirections string and current x position to figure out the next move
+  const newX = position.x + 1;
+  const direction = optimalDirections[position.x];
+  const newY = position.y + directionLookup[direction];
 
   return new Position(newX, newY);
 };
