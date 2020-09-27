@@ -19,6 +19,7 @@
   - [3. Final iteration and working backwards](#3-final-iteration-and-working-backwards)
   - [Coding the algorithm](#coding-the-algorithm)
     - [Coding plan](#coding-plan)
+  - [Results](#results)
 
 <!-- /code_chunk_output -->
 
@@ -184,3 +185,14 @@ Depending on how `index.js` is set up, logic may need to be added to detect when
 3. Write a function that takes an array produced by the function above and works backwards to return the best path, maybe just in string form (i.e. "RDURDURDR")
 
 4. Make the `move` function read from the directions and return appropriate positions
+
+### Results
+
+| Mine            | Score    |
+| --------------- | -------- |
+| Jupiter         | 6971     |
+| Luna            | 70       |
+| Mars            | 721      |
+| **Final Score** | **7762** |
+
+Execution time: 4651ms
