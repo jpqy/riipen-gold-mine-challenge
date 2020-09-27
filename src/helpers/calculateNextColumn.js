@@ -47,9 +47,12 @@ function calculateNextColumn(prevCol, nextCol) {
     const maxSumFromPrevCol = Math.max(...legalPrevColSums);
 
     // Find the direction(s) that would have been taken from the max sum(s) of prevCol to nextCol.
-    const dirFlags = `${prevCol[i - 1] && prevCol[i - 1].sum === maxSumFromPrevCol ? "d" : ""}${
-      prevCol[i] && prevCol[i].sum === maxSumFromPrevCol ? "r" : ""
-    }${prevCol[i + 1] && prevCol[i + 1].sum === maxSumFromPrevCol ? "u" : ""}`;
+    // Add another check to make sure we aren't making the same move twice.
+    const dirFlags = `${
+      prevCol[i - 1] && prevCol[i - 1].dirFlags !== "d" && prevCol[i - 1].sum === maxSumFromPrevCol ? "d" : ""
+    }${prevCol[i] && prevCol[i].dirFlags !== "r" && prevCol[i].sum === maxSumFromPrevCol ? "r" : ""}${
+      prevCol[i + 1] && prevCol[i + 1].dirFlags !== "u" && prevCol[i + 1].sum === maxSumFromPrevCol ? "u" : ""
+    }`;
 
     return { sum: nextColValue + maxSumFromPrevCol, dirFlags };
   });
